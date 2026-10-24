@@ -1,0 +1,27 @@
+SUDSY'S SOAPS — STRIPE SANDBOX CHECKOUT UPDATE
+
+Upload
+1. Extract this ZIP.
+2. Open the GitHub repository Sudsys-soap/sudsys-soaps at its top level.
+3. Select Add file > Upload files.
+4. Drag the SudsysWebsite folder from this ZIP into the upload area. This merges and replaces the matching files in SudsysWebsite/dist. Keep the existing assets, style.css and catalog.json.
+5. Commit the changes to main.
+6. Cloudflare automatically redeploys. The build output directory remains SudsysWebsite/dist; no build command is needed. _worker.js is deployed as a Cloudflare Pages advanced-mode Worker.
+
+Cloudflare secret
+Production environment: STRIPE_SECRET_KEY, encrypted, containing the sandbox sk_test_ key already saved. This update refuses sk_live_ keys. No publishable key is needed for the redirect-based flow.
+
+Test
+After Cloudflare reports a successful deployment, open your pages.dev website, add an available product, open the basket and click Test checkout. A €7 delivery charge is included, and addresses are restricted to Ireland (IE). Use Stripe test payment details only. Do not enter a real card. Complete the test and confirm the return page says Test payment successful, then check the corresponding payment in your Stripe sandbox. The basket intentionally remains populated for further tests. Cancelled or failed payments should not display success.
+
+What was checked
+JavaScript syntax and mocked server integration tests passed: server-controlled prices, quantities, stock snapshot limits including duplicate items, IE country, €7 shipping, cross-origin rejection, live-key rejection, session status verification, and foreign-session rejection. Real Stripe credentials were not available to the developer; the real sandbox test remains to be performed after your deployment.
+
+Before live sales
+This update is sandbox-only, not a completed live commerce system. It does not reserve or update stock, create persistent shop orders, send order emails, issue gift cards, implement refunds, or receive signed payment webhooks. Prices and stock are an imported snapshot; no VAT calculation was added. Before accepting real payments, implement durable inventory/order storage, verified and idempotent Stripe webhooks, order notifications and fulfilment, rate limiting/abuse controls, current shop policies, and the business's confirmed tax treatment. Validate final pricing and delivery settings, then complete Stripe live verification and integration tests before enabling live payments. Do not remove the live-key guard to launch this version.
+
+Files
+SudsysWebsite/dist/_worker.js — server-side sandbox checkout and status endpoints; no secrets included.
+SudsysWebsite/dist/app.js — basket integration with test checkout and delivery total.
+SudsysWebsite/dist/index.html — test-mode label.
+SudsysWebsite/dist/checkout-result.html and checkout-result.js — server-verified sandbox result page.
